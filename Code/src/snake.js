@@ -2,13 +2,14 @@ const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
 export default class Snake {
-    constructor(color, length, PosX, PosY, snakeDirection) {
+    constructor(color, length, PosX, PosY, snakeDirection,isHungry) {
         this.color = color;
         this.length = length;
         this.PosX = PosX;
         this.PosY = PosY;
         this.listeCordonnees = [];
         this.snakeDirection = snakeDirection;
+        this.isHungry=isHungry;
     }
 
     initialSnake() {
@@ -20,17 +21,20 @@ export default class Snake {
         for (let i = 0; i < this.length; i++) {
             this.listeCordonnees.push({ PosX: this.PosX - i, PosY: this.PosY });
         }
+        
     }
 
     update() {
         this.move();
+        if(this.isHungry>0)
+        {
+        this.isHungry--;
+        }
+        
     }
 
     move() {
-        for (let i = this.listeCordonnees.length - 1; i > 0; i--) {
-            this.listeCordonnees[i] = { ...this.listeCordonnees[i - 1] };
-        }
-
+        this.listeCordonnees.unshift({PosX: this.listeCordonnees[0].PosX,PosY: this.listeCordonnees[0].PosY})
         switch (this.snakeDirection) {
             case 1:
                 this.listeCordonnees[0].PosY -= 1;
@@ -45,6 +49,11 @@ export default class Snake {
                 this.listeCordonnees[0].PosX -= 1;
                 break;
         }
+        if(this.isHungry==0)
+        {
+        
+            this.listeCordonnees.pop();
+        }
     }
     draw(){
         for (let i = this.listeCordonnees.length - 1; i > 0; i--) {
@@ -53,5 +62,10 @@ export default class Snake {
         }
         ctx.fillStyle = 'blue';
         ctx.fillRect(this.listeCordonnees[0].PosX*10, this.listeCordonnees[0].PosY*10, 10, 10);
+    }
+    
+    checkIntercection(){
+        const[head,...body] = this.listeCordonnees;
+        return body.some((n1)=>(n1.PosX === head.PosX && n1.PosY === head.PosY))
     }
 }
