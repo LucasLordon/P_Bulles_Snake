@@ -14,35 +14,32 @@ export default class Apple {
         this.draw();
     }
     checkColision(){
-            if((this.Snake.listeCordonnees[0].PosY == this.PosY)&(this.Snake.listeCordonnees[0].PosX == this.PosX)){        
-                this.Colision();
-            }
+        ((this.Snake.listeCordonnees[0].PosY == this.PosY) && (this.Snake.listeCordonnees[0].PosX == this.PosX)) ? this.Colision() : null;
     }
     Colision(){
         this.spawn();
         this.draw();
-        this.Snake.isHungry = this.Snake.isHungry+this.Value;
-        
-
+        this.Snake.isHungry += this.Value;
     }
     spawn(){
         let goodPos = true
-        do{
+        
+        function isPositionValid(X, Y, snakeCoordinates) {
+            return snakeCoordinates.some(coord => coord.PosY === Y && coord.PosX === X);
+        }
+        
+        do {
             let X = Math.floor(Math.random() * 80);
             let Y = Math.floor(Math.random() * 80);
-
-            for (let i = this.Snake.listeCordonnees.length; i > 0; i--) {
-                if((this.Snake.listeCordonnees[i-1].PosY == Y)&(this.Snake.listeCordonnees[i-1].PosX == X)){
-                    goodPos=false;
-                }
-                else
-                {
-                    this.PosX = X;
-                    this.PosY= Y;
-                }
+        
+            goodPos = !isPositionValid(X, Y, this.Snake.listeCordonnees);
+        
+            if (goodPos) {
+                this.PosX = X;
+                this.PosY = Y;
             }
-        }while (goodPos == false);
-
+        } while (!goodPos);
+        
     }
     draw(){
         ctx.fillStyle = this.color;

@@ -13,28 +13,14 @@ export default class Snake {
     }
 
     initialSnake() {
-        this.initialSnakeCord();
-    }
-
-    initialSnakeCord() {
-        // Ajoute les coordonnées au serpent
-        for (let i = 0; i < this.length; i++) {
-            this.listeCordonnees.push({ PosX: this.PosX - i, PosY: this.PosY });
-        }
-        
+        this.listeCordonnees = Array.from({ length: this.length }, (_, i) => ({ PosX: this.PosX - i, PosY: this.PosY }));
     }
 
     update() {
         this.move();
-        if(this.isHungry>0)
-        {
-        this.isHungry--;
-        }
-        
+        (this.isHungry>0)?this.isHungry--: undefined;
     }
-
-    move() {
-        this.listeCordonnees.unshift({PosX: this.listeCordonnees[0].PosX,PosY: this.listeCordonnees[0].PosY})
+    movehead(){
         switch (this.snakeDirection) {
             case 1:
                 this.listeCordonnees[0].PosY -= 1;
@@ -49,23 +35,30 @@ export default class Snake {
                 this.listeCordonnees[0].PosX -= 1;
                 break;
         }
-        if(this.isHungry==0)
-        {
-        
-            this.listeCordonnees.pop();
-        }
+    }
+    move() {
+        this.listeCordonnees.unshift({PosX: this.listeCordonnees[0].PosX,PosY: this.listeCordonnees[0].PosY})
+        this.movehead();
+        (this.isHungry === 0) ? this.listeCordonnees.pop() : undefined;
+
     }
     draw(){
-        for (let i = this.listeCordonnees.length - 1; i > 0; i--) {
+        this.listeCordonnees.forEach(coord => {
             ctx.fillStyle = 'red';
-            ctx.fillRect(this.listeCordonnees[i].PosX*10, this.listeCordonnees[i].PosY*10, 10, 10);
-        }
+            ctx.fillRect(coord.PosX * 10, coord.PosY * 10, 10, 10);
+          });          
         ctx.fillStyle = 'blue';
         ctx.fillRect(this.listeCordonnees[0].PosX*10, this.listeCordonnees[0].PosY*10, 10, 10);
     }
     
     checkIntercection(){
         const[head,...body] = this.listeCordonnees;
-        return body.some((n1)=>(n1.PosX === head.PosX && n1.PosY === head.PosY))
+        return body.some((n1)=>(n1.PosX === head.PosX && n1.PosY === head.PosY))||(!this.checkBorder())
+    }
+    checkBorder(){
+        return (
+            (this.listeCordonnees[0].PosX >= 0 && this.listeCordonnees[0].PosX < 81) &&
+            (this.listeCordonnees[0].PosY >= 0 && this.listeCordonnees[0].PosY < 81)
+        ); 
     }
 }
