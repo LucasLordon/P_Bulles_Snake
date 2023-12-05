@@ -12,6 +12,13 @@ body {
   justify-content: center;
   align-items: center;
   background: rgb(61, 42, 42);
+  flex-direction: column;
+}
+
+#Score {
+  margin-top: 20px;
+  text-align: center;
+  color: white;
 }
 
 canvas {

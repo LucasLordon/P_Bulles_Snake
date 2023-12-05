@@ -2,12 +2,15 @@ const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
 export default class Apple {
-    constructor(color, PosX, PosY,Snake,Value) {
+    constructor(color, PosX, PosY,Snake,Value,GAMESQUARESIZE,GAMEGRIDWITHSIZE,GAMEGRIDHEIGHTSIZE) {
         this.color = color;
         this.PosX = PosX;
         this.PosY = PosY;
         this.Snake = Snake;
         this.Value =Value;
+        this.GAMESQUARESIZE=GAMESQUARESIZE;
+        this.GAMEGRIDWITHSIZE=GAMEGRIDWITHSIZE;
+        this.GAMEGRIDHEIGHTSIZE=GAMEGRIDHEIGHTSIZE;
     }
     create(){
         this.spawn();
@@ -19,6 +22,7 @@ export default class Apple {
     Colision(){
         this.spawn();
         this.draw();
+        this.Snake.score+=this.Value;
         this.Snake.isHungry += this.Value;
     }
     spawn(){
@@ -29,8 +33,8 @@ export default class Apple {
         }
         
         do {
-            let X = Math.floor(Math.random() * 80);
-            let Y = Math.floor(Math.random() * 80);
+            let X = Math.floor(Math.random() * this.GAMEGRIDWITHSIZE);
+            let Y = Math.floor(Math.random() * this.GAMEGRIDHEIGHTSIZE);
         
             goodPos = !isPositionValid(X, Y, this.Snake.listeCordonnees);
         
@@ -43,6 +47,6 @@ export default class Apple {
     }
     draw(){
         ctx.fillStyle = this.color;
-        ctx.fillRect(this.PosX*10, this.PosY*10, 10, 10);
+        ctx.fillRect(this.PosX*this.GAMESQUARESIZE, this.PosY*this.GAMESQUARESIZE, this.GAMESQUARESIZE, this.GAMESQUARESIZE);
     }
 }

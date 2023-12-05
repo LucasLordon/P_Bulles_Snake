@@ -1,8 +1,9 @@
+import '../src/main';
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
 export default class Snake {
-    constructor(color, length, PosX, PosY, snakeDirection,isHungry) {
+    constructor(color, length, PosX, PosY, snakeDirection,isHungry,GAMESQUARESIZE,GAMEGRIDWITHSIZE,GAMEGRIDHEIGHTSIZE,DEFAULTSCORE) {
         this.color = color;
         this.length = length;
         this.PosX = PosX;
@@ -10,8 +11,11 @@ export default class Snake {
         this.listeCordonnees = [];
         this.snakeDirection = snakeDirection;
         this.isHungry=isHungry;
+        this.GAMESQUARESIZE=GAMESQUARESIZE;
+        this.GAMEGRIDWITHSIZE=GAMEGRIDWITHSIZE;
+        this.GAMEGRIDHEIGHTSIZE=GAMEGRIDHEIGHTSIZE;
+        this.score=DEFAULTSCORE;
     }
-
     initialSnake() {
         this.listeCordonnees = Array.from({ length: this.length }, (_, i) => ({ PosX: this.PosX - i, PosY: this.PosY }));
     }
@@ -45,10 +49,11 @@ export default class Snake {
     draw(){
         this.listeCordonnees.forEach(coord => {
             ctx.fillStyle = 'red';
-            ctx.fillRect(coord.PosX * 10, coord.PosY * 10, 10, 10);
+            ctx.fillRect(coord.PosX * this.GAMESQUARESIZE, coord.PosY * this.GAMESQUARESIZE, this.GAMESQUARESIZE, this.GAMESQUARESIZE);
           });          
         ctx.fillStyle = 'blue';
-        ctx.fillRect(this.listeCordonnees[0].PosX*10, this.listeCordonnees[0].PosY*10, 10, 10);
+        ctx.strokeStyle = 'green';
+        ctx.fillRect(this.listeCordonnees[0].PosX*this.GAMESQUARESIZE, this.listeCordonnees[0].PosY*this.GAMESQUARESIZE, this.GAMESQUARESIZE, this.GAMESQUARESIZE);
     }
     
     checkIntercection(){
@@ -57,8 +62,8 @@ export default class Snake {
     }
     checkBorder(){
         return (
-            (this.listeCordonnees[0].PosX >= 0 && this.listeCordonnees[0].PosX < 81) &&
-            (this.listeCordonnees[0].PosY >= 0 && this.listeCordonnees[0].PosY < 81)
+            (this.listeCordonnees[0].PosX >= 0 && this.listeCordonnees[0].PosX < this.GAMEGRIDWITHSIZE) &&
+            (this.listeCordonnees[0].PosY >= 0 && this.listeCordonnees[0].PosY < this.GAMEGRIDHEIGHTSIZE)
         ); 
     }
 }
