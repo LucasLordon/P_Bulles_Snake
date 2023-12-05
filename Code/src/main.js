@@ -1,69 +1,88 @@
+//////////////////Import//////////////////
+
 import '../css/style.css';
-import '../src/apple';
-import Apple from '../src/apple';
-import Snake from '../src/snake';
+import './apple';
+import Apple from './apple';
+import Snake from './snake';
 
+//////////////////Constant//////////////////
+
+  //CANVAS
 const canvas = document.querySelector('canvas');
-const ctx = canvas.getContext('2d');
+const CTX = canvas.getContext('2d');
+  //GRID
+const GRID_BACK_GROUND_COLOR = 'black';
+const GRID_WITH = canvas.width;
+const GRID_HEIGHT = canvas.height;
+  //GAME
+const GAME_SQUARE_SIZE = 50;
+const GAME_SPEED = 200;
+const GAME_GRID_WITH_SIZE = GRID_WITH/GAME_SQUARE_SIZE;
+const GAME_GRID_HEIGHT_SIZE = GRID_HEIGHT/GAME_SQUARE_SIZE;
+  //SNAKE
+const SNAKE_DEFAULT_LENGTH = 3;
+const SNAKE_DEFAULT_HUNGER = 0;
+const SNAKE_DEFAULT_COLOR = "blue";
+const SNAKE_DEFAULT_POS_X = 0;
+const SNAKE_DEFAULT_POS_Y = 0;
+const SNAKE_DEFAULT_DIRECTION = 2;// 1=UP / 2=RIGHT / 3=DOWN / 4=LEFT
+const SNAKE_DEFAULT_CAN_CHANGE_DIRECTION = true;
+const SNAKE_DEFAULT_SCORE = 0;
+const SNAKE_DEFAULT_DOWN_CONTROL = "ArrowDown"
+const SNAKE_DEFAULT_UP_CONTROL = "ArrowUp"
+const SNAKE_DEFAULT_LEFT_CONTROL = "ArrowLeft"
+const SNAKE_DEFAULT_RIGHT_CONTROL = "ArrowRight"
 
-const GRIDWITH = canvas.width;
-const GRIDHEIGHT = canvas.height;
-const GAMESQUARESIZE = 50;
-const GAMEGRIDWITHSIZE = GRIDWITH/GAMESQUARESIZE;
-const GAMEGRIDHEIGHTSIZE = GRIDHEIGHT/GAMESQUARESIZE;
-const snakeDefaultLength = 3;
-const snakeDefaultHunger = 0;
-const snakeDefaultColor = "blue";
-const snakeDefaultPosX = 0;
-const snakeDefaultPosY = 0;
-let snakeCanChangeDirection = true;
-let snakeDirection = 2; // 1=UP / 2=RIGHT / 3=DOWN / 4=LEFT
+//////////////////Variables//////////////////
+
 let firstTime=true
 let gameOver = false
-const DEFAULTSCORE = 0;
 
+//////////////////Game objects//////////////////
 
-let snake = new Snake(snakeDefaultColor,snakeDefaultLength,snakeDefaultPosX,snakeDefaultPosY,snakeDirection,snakeDefaultHunger,GAMESQUARESIZE,GAMEGRIDWITHSIZE,GAMEGRIDHEIGHTSIZE,DEFAULTSCORE);
-let apple = new Apple('orange',0,0,snake,5,GAMESQUARESIZE,GAMEGRIDWITHSIZE,GAMEGRIDHEIGHTSIZE)
+let snake = new Snake(SNAKE_DEFAULT_COLOR,SNAKE_DEFAULT_LENGTH,SNAKE_DEFAULT_POS_X,SNAKE_DEFAULT_POS_Y,SNAKE_DEFAULT_DIRECTION,SNAKE_DEFAULT_HUNGER,GAME_SQUARE_SIZE,GAME_GRID_WITH_SIZE,GAME_GRID_HEIGHT_SIZE,SNAKE_DEFAULT_SCORE,SNAKE_DEFAULT_CAN_CHANGE_DIRECTION,SNAKE_DEFAULT_DOWN_CONTROL,SNAKE_DEFAULT_UP_CONTROL,SNAKE_DEFAULT_LEFT_CONTROL,SNAKE_DEFAULT_RIGHT_CONTROL);
+let apple = new Apple('orange',0,0,snake,1,GAME_SQUARE_SIZE,GAME_GRID_WITH_SIZE,GAME_GRID_HEIGHT_SIZE)
+
+//////////////////Program//////////////////
 
 snake.initialSnake();
 
 const move = () => {
   console.log(snake.score)
   document.getElementById("Score").innerHTML="Score : "+snake.score;
-  snakeCanChangeDirection=true;
+  snake.canChangeDirection=true;
   snake.update();
   apple.checkColision();
   gameOver=snake.checkIntercection();
   !gameOver
-  ? (ctx.fillStyle = 'black',
-     ctx.fillRect(0, 0, 800, 800),
-     firstTime ? (apple.create(), firstTime = false, console.log(GAMEGRIDWITHSIZE), console.log(GAMEGRIDHEIGHTSIZE)) : 
+  ? (CTX.fillStyle = GRID_BACK_GROUND_COLOR,
+     CTX.fillRect(0, 0, GRID_WITH, GRID_HEIGHT),
+     firstTime ? (apple.create(), firstTime = false, console.log(GAME_GRID_WITH_SIZE), console.log(GAME_GRID_HEIGHT_SIZE)) : 
      snake.draw(),
      apple.draw())
   : location.reload();
 
 };
-  setInterval(move, 200);
+  setInterval(move, GAME_SPEED);
   window.addEventListener("keydown", event => {
-    if(snakeCanChangeDirection==true){
+    if(snake.canChangeDirection==true){
     
       switch (event.key) {
-      case "ArrowDown":
-        snake.snakeDirection = (snake.snakeDirection !== 1) ? 3 : snake.snakeDirection;
-        snakeCanChangeDirection=false;
+      case snake.SNAKEDEFAULTDOWNCONTROL:
+        snake.direction = (snake.direction !== 1) ? 3 : snake.direction;
+        snake.canChangeDirection=false;
         break;
-      case "ArrowUp":
-        snake.snakeDirection = (snake.snakeDirection !== 3) ? 1 : snake.snakeDirection;
-        snakeCanChangeDirection=false;
+      case snake.SNAKEDEFAULTUPCONTROL:
+        snake.direction = (snake.direction !== 3) ? 1 : snake.direction;
+        snake.canChangeDirection=false;
         break;
-      case "ArrowLeft":
-        snake.snakeDirection = (snake.snakeDirection !== 2) ? 4 : snake.snakeDirection;
-        snakeCanChangeDirection=false;
+      case snake.SNAKEDEFAULTLEFTCONTROL:
+        snake.direction = (snake.direction !== 2) ? 4 : snake.direction;
+        snake.canChangeDirection=false;
         break;
-      case "ArrowRight":
-        snake.snakeDirection = (snake.snakeDirection !== 4) ? 2 : snake.snakeDirection;
-        snakeCanChangeDirection=false;
+      case snake.SNAKEDEFAULTRIGHTCONTROL:
+        snake.direction = (snake.direction !== 4) ? 2 : snake.direction;
+        snake.canChangeDirection=false;
         break;
       } 
     }

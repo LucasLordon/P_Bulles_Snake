@@ -3,18 +3,23 @@ const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
 export default class Snake {
-    constructor(color, length, PosX, PosY, snakeDirection,isHungry,GAMESQUARESIZE,GAMEGRIDWITHSIZE,GAMEGRIDHEIGHTSIZE,DEFAULTSCORE) {
+    constructor(color, length, PosX, PosY, snakeDirection,isHungry,GAMESQUARESIZE,GAMEGRIDWITHSIZE,GAMEGRIDHEIGHTSIZE,DEFAULTSCORE,snakeCanChangeDirection,SNAKEDEFAULTDOWNCONTROL,SNAKEDEFAULTUPCONTROL,SNAKEDEFAULTLEFTCONTROL,SNAKEDEFAULTRIGHTCONTROL) {
         this.color = color;
         this.length = length;
         this.PosX = PosX;
         this.PosY = PosY;
         this.listeCordonnees = [];
-        this.snakeDirection = snakeDirection;
+        this.direction = snakeDirection;
         this.isHungry=isHungry;
         this.GAMESQUARESIZE=GAMESQUARESIZE;
         this.GAMEGRIDWITHSIZE=GAMEGRIDWITHSIZE;
         this.GAMEGRIDHEIGHTSIZE=GAMEGRIDHEIGHTSIZE;
         this.score=DEFAULTSCORE;
+        this.canChangeDirection=snakeCanChangeDirection;
+        this.SNAKEDEFAULTDOWNCONTROL=SNAKEDEFAULTDOWNCONTROL;
+        this.SNAKEDEFAULTUPCONTROL=SNAKEDEFAULTUPCONTROL;
+        this.SNAKEDEFAULTLEFTCONTROL=SNAKEDEFAULTLEFTCONTROL;
+        this.SNAKEDEFAULTRIGHTCONTROL=SNAKEDEFAULTRIGHTCONTROL;
     }
     initialSnake() {
         this.listeCordonnees = Array.from({ length: this.length }, (_, i) => ({ PosX: this.PosX - i, PosY: this.PosY }));
@@ -25,7 +30,7 @@ export default class Snake {
         (this.isHungry>0)?this.isHungry--: undefined;
     }
     movehead(){
-        switch (this.snakeDirection) {
+        switch (this.direction) {
             case 1:
                 this.listeCordonnees[0].PosY -= 1;
                 break;
