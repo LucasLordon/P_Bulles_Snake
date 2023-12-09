@@ -2,11 +2,11 @@ const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
 export default class Apple {
-    constructor(color, PosX, PosY,Snake,Value,GAMESQUARESIZE,GAMEGRIDWITHSIZE,GAMEGRIDHEIGHTSIZE) {
+    constructor(color, PosX, PosY,snakes,Value,GAMESQUARESIZE,GAMEGRIDWITHSIZE,GAMEGRIDHEIGHTSIZE) {
         this.color = color;
         this.PosX = PosX;
         this.PosY = PosY;
-        this.Snake = Snake;
+        this.snakes = snakes;
         this.Value =Value;
         this.GAMESQUARESIZE=GAMESQUARESIZE;
         this.GAMEGRIDWITHSIZE=GAMEGRIDWITHSIZE;
@@ -16,14 +16,15 @@ export default class Apple {
         this.spawn();
         this.draw();
     }
-    checkColision(){
-        ((this.Snake.listeCordonnees[0].PosY == this.PosY) && (this.Snake.listeCordonnees[0].PosX == this.PosX)) ? this.Colision() : null;
+    checkCollision(snake) {
+        ((snake.listeCordonnees[0].PosY == this.PosY) && (snake.listeCordonnees[0].PosX == this.PosX)) ? this.Colision(snake) : null;
     }
-    Colision(){
+    
+    Colision(snake){
         this.spawn();
         this.draw();
-        this.Snake.score+=this.Value;
-        this.Snake.isHungry += this.Value;
+        snake.score+=this.Value;
+        snake.isHungry += this.Value;
     }
     spawn(){
         let goodPos = true
@@ -36,7 +37,8 @@ export default class Apple {
             let X = Math.floor(Math.random() * this.GAMEGRIDWITHSIZE);
             let Y = Math.floor(Math.random() * this.GAMEGRIDHEIGHTSIZE);
         
-            goodPos = !isPositionValid(X, Y, this.Snake.listeCordonnees);
+            goodPos = this.snakes.every(snake => !isPositionValid(X, Y, snake.listeCordonnees));
+
         
             if (goodPos) {
                 this.PosX = X;
