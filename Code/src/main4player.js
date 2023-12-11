@@ -44,7 +44,6 @@ let player2Score = 0;
 //////////////////Game objects//////////////////
 
 let snakes = [];
-let numberOfSnakes = 2; // Set the number of snakes you want
 let cpttest = 0
 
 
@@ -71,9 +70,9 @@ const snakeConfigs = [
     color: "yellow",
     bodyColor:"green",
     length: SNAKE_DEFAULT_LENGTH,
-    posX: 23, // Adjust the starting position for the second snake
-    posY: 23,
-    direction: 4,
+    posX: 23,
+    posY: 0,
+    direction: 3,
     hunger: SNAKE_DEFAULT_HUNGER,
     squareSize: GAME_SQUARE_SIZE,
     gridWidth: GAME_GRID_WITH_SIZE,
@@ -85,8 +84,44 @@ const snakeConfigs = [
     leftControl: "a",
     rightControl: "d",
   },
+  {
+    color: "purple",
+    bodyColor:"Magenta",
+    length: SNAKE_DEFAULT_LENGTH,
+    posX: 23,
+    posY: 23,
+    direction: 4,
+    hunger: SNAKE_DEFAULT_HUNGER,
+    squareSize: GAME_SQUARE_SIZE,
+    gridWidth: GAME_GRID_WITH_SIZE,
+    gridHeight: GAME_GRID_HEIGHT_SIZE,
+    score: SNAKE_DEFAULT_SCORE,
+    canChangeDirection: SNAKE_DEFAULT_CAN_CHANGE_DIRECTION,
+    downControl: "2",
+    upControl: "5",
+    leftControl: "1",
+    rightControl: "3",
+  },
+  {
+    color: "Cyan",
+    bodyColor:"White",
+    length: SNAKE_DEFAULT_LENGTH,
+    posX: 0,
+    posY: 23,
+    direction: 1,
+    hunger: SNAKE_DEFAULT_HUNGER,
+    squareSize: GAME_SQUARE_SIZE,
+    gridWidth: GAME_GRID_WITH_SIZE,
+    gridHeight: GAME_GRID_HEIGHT_SIZE,
+    score: SNAKE_DEFAULT_SCORE,
+    canChangeDirection: SNAKE_DEFAULT_CAN_CHANGE_DIRECTION,
+    downControl: "k",
+    upControl: "i",
+    leftControl: "j",
+    rightControl: "l",
+  }
 ];
-
+let numberOfSnakes = snakeConfigs.length;
 for (let i = 0; i < numberOfSnakes; i++) {
   let newSnake = new Snake(
     snakeConfigs[i].color,
@@ -123,7 +158,7 @@ const move = () => {
     snakes[i].canChangeDirection = true;
     snakes[i].update();
     apple.checkCollision(snakes[i]);
-    (snakes[i].checkSnakeIntercection(snakes[0],snakes[1])||snakes[i].checkIntercection())&&!cpttest==0?
+    (compareSnakeColision()||snakes[i].checkIntercection())&&!cpttest==0?
     gameOver = true:undefined;
 
   }
@@ -166,3 +201,12 @@ window.addEventListener("keydown", event => {
 });
 
 requestAnimationFrame(move);
+
+function compareSnakeColision() {
+  for (let i = 0; i < numberOfSnakes - 2; i++) {
+      for (let j = i + 1; j < numberOfSnakes-1; j++) {
+          console.log(snakes[i].checkSnakeIntercection(snakes[i],snakes[j]))
+          return snakes[i].checkSnakeIntercection(snakes[i],snakes[j]);
+      }
+  }
+}

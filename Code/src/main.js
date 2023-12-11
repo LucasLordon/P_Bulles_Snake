@@ -44,7 +44,7 @@ let player2Score = 0;
 //////////////////Game objects//////////////////
 
 let snakes = [];
-let numberOfSnakes = 2; // Set the number of snakes you want
+let numberOfSnakes = 1; // Set the number of snakes you want
 let cpttest = 0
 
 
@@ -66,25 +66,7 @@ const snakeConfigs = [
     upControl: SNAKE_DEFAULT_UP_CONTROL,
     leftControl: SNAKE_DEFAULT_LEFT_CONTROL,
     rightControl: SNAKE_DEFAULT_RIGHT_CONTROL,
-  },
-  {
-    color: "yellow",
-    bodyColor:"green",
-    length: SNAKE_DEFAULT_LENGTH,
-    posX: 23, // Adjust the starting position for the second snake
-    posY: 23,
-    direction: 4,
-    hunger: SNAKE_DEFAULT_HUNGER,
-    squareSize: GAME_SQUARE_SIZE,
-    gridWidth: GAME_GRID_WITH_SIZE,
-    gridHeight: GAME_GRID_HEIGHT_SIZE,
-    score: SNAKE_DEFAULT_SCORE,
-    canChangeDirection: SNAKE_DEFAULT_CAN_CHANGE_DIRECTION,
-    downControl: "s",
-    upControl: "w",
-    leftControl: "a",
-    rightControl: "d",
-  },
+  }
 ];
 
 for (let i = 0; i < numberOfSnakes; i++) {
@@ -119,11 +101,11 @@ snakes.forEach(snake => {
 
 const move = () => {
   for (let i = 0; i < numberOfSnakes; i++) {
-    document.getElementById("Score").innerHTML = "Score Snake n°1 : " + snakes[0].score + "  |  Score Snake n°2 : " + snakes[1].score;
+    document.getElementById("Score").innerHTML = "Score Snake : " + snakes[0].score;
     snakes[i].canChangeDirection = true;
     snakes[i].update();
     apple.checkCollision(snakes[i]);
-    (snakes[i].checkSnakeIntercection(snakes[0],snakes[1])||snakes[i].checkIntercection())&&!cpttest==0?
+    snakes[i].checkIntercection()&&!cpttest==0?
     gameOver = true:undefined;
 
   }
