@@ -16,7 +16,7 @@ const GRID_WITH = canvas.width;
 const GRID_HEIGHT = canvas.height;
   //GAME
 const GAME_SQUARE_SIZE = 50;
-const GAME_SPEED = 50;
+const GAME_SPEED = 200;
 const GAME_GRID_WITH_SIZE = GRID_WITH/GAME_SQUARE_SIZE;
 const GAME_GRID_HEIGHT_SIZE = GRID_HEIGHT/GAME_SQUARE_SIZE;
   //SNAKE
