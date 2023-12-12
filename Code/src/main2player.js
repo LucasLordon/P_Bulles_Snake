@@ -71,7 +71,7 @@ const snakeConfigs = [
     color: "yellow",
     bodyColor:"green",
     length: SNAKE_DEFAULT_LENGTH,
-    posX: 23, // Adjust the starting position for the second snake
+    posX: 23,
     posY: 23,
     direction: 4,
     hunger: SNAKE_DEFAULT_HUNGER,
