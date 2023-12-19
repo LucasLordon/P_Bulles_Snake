@@ -114,7 +114,7 @@ let apple = new Apple('orange',0,0,snakes,1,GAME_SQUARE_SIZE,GAME_GRID_WITH_SIZE
 //////////////////Program//////////////////
 
 snakes.forEach(snake => {
-  snake.initialSnake();
+  snake.initial();
 });
 
 const move = () => {

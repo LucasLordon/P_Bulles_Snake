@@ -54,7 +54,7 @@ const snakeConfigs = [
     length: SNAKE_DEFAULT_LENGTH,
     posX: SNAKE_DEFAULT_POS_X,
     posY: SNAKE_DEFAULT_POS_Y,
-    direction: SNAKE_DEFAULT_DIRECTION,
+    direction: 3,
     hunger: SNAKE_DEFAULT_HUNGER,
     squareSize: GAME_SQUARE_SIZE,
     gridWidth: GAME_GRID_WITH_SIZE,
@@ -65,6 +65,7 @@ const snakeConfigs = [
     upControl: SNAKE_DEFAULT_UP_CONTROL,
     leftControl: SNAKE_DEFAULT_LEFT_CONTROL,
     rightControl: SNAKE_DEFAULT_RIGHT_CONTROL,
+    freez: false,
   },
   {
     color: "yellow",
@@ -83,6 +84,7 @@ const snakeConfigs = [
     upControl: "w",
     leftControl: "a",
     rightControl: "d",
+    freez: false,
   },
   {
     color: "purple",
@@ -90,8 +92,8 @@ const snakeConfigs = [
     length: SNAKE_DEFAULT_LENGTH,
     posX: 23,
     posY: 23,
-    direction: 4,
-    hunger: SNAKE_DEFAULT_HUNGER,
+    direction: 1,
+    hunger: 50,
     squareSize: GAME_SQUARE_SIZE,
     gridWidth: GAME_GRID_WITH_SIZE,
     gridHeight: GAME_GRID_HEIGHT_SIZE,
@@ -101,6 +103,7 @@ const snakeConfigs = [
     upControl: "5",
     leftControl: "1",
     rightControl: "3",
+    freez: false,
   },
   {
     color: "Cyan",
@@ -119,9 +122,10 @@ const snakeConfigs = [
     upControl: "i",
     leftControl: "j",
     rightControl: "l",
+    freez: false,
   }
 ];
-let numberOfSnakes = snakeConfigs.length;
+let numberOfSnakes = 4;
 for (let i = 0; i < numberOfSnakes; i++) {
   let newSnake = new Snake(
     snakeConfigs[i].color,
@@ -139,7 +143,8 @@ for (let i = 0; i < numberOfSnakes; i++) {
     snakeConfigs[i].downControl,
     snakeConfigs[i].upControl,
     snakeConfigs[i].leftControl,
-    snakeConfigs[i].rightControl
+    snakeConfigs[i].rightControl,
+    snakeConfigs[i].freez
   );
   snakes.push(newSnake);
 }
@@ -149,17 +154,20 @@ let apple = new Apple('orange',0,0,snakes,1,GAME_SQUARE_SIZE,GAME_GRID_WITH_SIZE
 //////////////////Program//////////////////
 
 snakes.forEach(snake => {
-  snake.initialSnake();
+  snake.initial();
 });
 
 const move = () => {
+  compareSnakeColision()
+  
   for (let i = 0; i < numberOfSnakes; i++) {
+    snakes[i].checkIntercection()
     document.getElementById("Score").innerHTML = "Score Snake n°1 : " + snakes[0].score + "  |  Score Snake n°2 : " + snakes[1].score;
     snakes[i].canChangeDirection = true;
     snakes[i].update();
     apple.checkCollision(snakes[i]);
     (compareSnakeColision()||snakes[i].checkIntercection())&&!cpttest==0?
-    gameOver = true:undefined;
+    gameOver = false:undefined;
 
   }
 
@@ -169,7 +177,7 @@ const move = () => {
       firstTime
         ? (apple.create(), firstTime = false)
         : snakes.forEach(snake => snake.draw()),
-        apple.draw(),cpttest++): !cpttest==0?location.reload():console.log("1")
+        apple.draw(),cpttest++): (allfreez(),!cpttest==0)?location.reload():console.log("1")
     // : location.reload();
 };
 
@@ -203,10 +211,19 @@ window.addEventListener("keydown", event => {
 requestAnimationFrame(move);
 
 function compareSnakeColision() {
-  for (let i = 0; i < numberOfSnakes - 2; i++) {
-      for (let j = i + 1; j < numberOfSnakes-1; j++) {
-          console.log(snakes[i].checkSnakeIntercection(snakes[i],snakes[j]))
-          return snakes[i].checkSnakeIntercection(snakes[i],snakes[j]);
+  for (let i = 0; i <= numberOfSnakes; i++) {
+      for (let j = i + 1; j <= numberOfSnakes-1; j++) {
+          if(snakes[i].checkSnakeIntercection(snakes[i],snakes[j]))
+          {
+            return true;
+          }
       }
   }
+  return false;
+}
+function allfreez(){
+  for (let i; i < numberOfSnakes-1; i++) {
+    console.log(i)
+  }
+  return false;
 }

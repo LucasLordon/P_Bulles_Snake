@@ -2,7 +2,7 @@ const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
 export default class Snake {
-    constructor(color,bodyColor, length, PosX, PosY, snakeDirection,isHungry,GAMESQUARESIZE,GAMEGRIDWITHSIZE,GAMEGRIDHEIGHTSIZE,DEFAULTSCORE,snakeCanChangeDirection,SNAKEDEFAULTDOWNCONTROL,SNAKEDEFAULTUPCONTROL,SNAKEDEFAULTLEFTCONTROL,SNAKEDEFAULTRIGHTCONTROL) {
+    constructor(color,bodyColor, length, PosX, PosY, snakeDirection,isHungry,GAMESQUARESIZE,GAMEGRIDWITHSIZE,GAMEGRIDHEIGHTSIZE,DEFAULTSCORE,snakeCanChangeDirection,SNAKEDEFAULTDOWNCONTROL,SNAKEDEFAULTUPCONTROL,SNAKEDEFAULTLEFTCONTROL,SNAKEDEFAULTRIGHTCONTROL,freez) {
         this.color = color;
         this.bodyColor = bodyColor;
         this.length = length;
@@ -20,14 +20,19 @@ export default class Snake {
         this.SNAKEDEFAULTUPCONTROL=SNAKEDEFAULTUPCONTROL;
         this.SNAKEDEFAULTLEFTCONTROL=SNAKEDEFAULTLEFTCONTROL;
         this.SNAKEDEFAULTRIGHTCONTROL=SNAKEDEFAULTRIGHTCONTROL;
+        this.freez=freez;
     }
-    initialSnake() {
+    initial() {
         this.listeCordonnees = Array.from({ length: this.length }, (_, i) => ({ PosX: this.PosX - i, PosY: this.PosY }));
     }
 
     update() {
+        if(this.freez==false)
+        {
         this.move();
         (this.isHungry>0)?this.isHungry--: undefined;
+        }
+
     }
     movehead(){
         switch (this.direction) {
@@ -62,16 +67,26 @@ export default class Snake {
     
     checkIntercection(){
         const[head,...body] = this.listeCordonnees;
-        return body.some((n1)=>(n1.PosX === head.PosX && n1.PosY === head.PosY))||(!this.checkBorder())
+        if(body.some((n1)=>(n1.PosX === head.PosX && n1.PosY === head.PosY))||(!this.checkBorder()))
+        {
+            this.freez=true;
+        }
     }
     checkSnakeIntercection(snake1, snake2) {
         const [head1, ...body1] = snake1.listeCordonnees;
         const [head2, ...body2] = snake2.listeCordonnees;
     
         const head1CollidesWithSnake2 = body2.some(n => (n.PosX === head1.PosX && n.PosY === head1.PosY));
-    
+        
         const head2CollidesWithSnake1 = body1.some(n => (n.PosX === head2.PosX && n.PosY === head2.PosY));
-    
+        if(head1CollidesWithSnake2)
+        {
+            snake1.freez = true;
+        }
+        if(head2CollidesWithSnake1)
+        {
+            snake2.freez = true;
+        }
         return head1CollidesWithSnake2 || head2CollidesWithSnake1;
     }
     
