@@ -8,14 +8,14 @@ const ctx = canvas.getContext('2d');
 export default class Apple {
     constructor(color, PosX, PosY, snakes, Value, GAMESQUARESIZE, GAMEGRIDWITHSIZE, GAMEGRIDHEIGHTSIZE) {
         // Initialisation des propriétés
-        this.color = color;
-        this.PosX = PosX;
-        this.PosY = PosY;
-        this.snakes = snakes;
-        this.Value = Value;
-        this.GAMESQUARESIZE = GAMESQUARESIZE;
-        this.GAMEGRIDWITHSIZE = GAMEGRIDWITHSIZE;
-        this.GAMEGRIDHEIGHTSIZE = GAMEGRIDHEIGHTSIZE;
+        this.color = color;//couleur de la pomme
+        this.PosX = PosX; // Position X de la pomme
+        this.PosY = PosY; // Position y de la pomme
+        this.snakes = snakes; //Liste contenant tout les serpents
+        this.Value = Value;//valeur de la pomme(de combien la pomme nouris les serpent)
+        this.GAMESQUARESIZE = GAMESQUARESIZE;//Taille d'un carré du jeu
+        this.GAMEGRIDWITHSIZE = GAMEGRIDWITHSIZE;// Nombre de carrés en largeur
+        this.GAMEGRIDHEIGHTSIZE = GAMEGRIDHEIGHTSIZE;// Nombre de carrés en hauteur
     }
 
     // Crée et dessine une nouvelle pomme
@@ -37,7 +37,7 @@ export default class Apple {
         snake.isHungry += this.Value;
     }
 
-    // Place la pomme à une position aléatoire qui ne chevauche pas le serpent
+    // Place la pomme à une position aléatoire qui ne chevauche pas les serpents
     spawn() {
         let goodPos = true
 
@@ -51,6 +51,7 @@ export default class Apple {
 
             goodPos = this.snakes.every(snake => !isPositionValid(X, Y, snake.listeCordonnees));
 
+            //definit la nouvelle position
             if (goodPos) {
                 this.PosX = X;
                 this.PosY = Y;

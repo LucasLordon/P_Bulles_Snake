@@ -38,8 +38,6 @@ const SNAKE_DEFAULT_RIGHT_CONTROL = "ArrowRight"; // Touche de contrôle vers la
 
 let firstTime = true; // Indicateur de la première exécution du jeu
 let gameOver = false; // Indicateur de fin de jeu
-let player1Score = 0; // Score du joueur 1
-let player2Score = 0; // Score du joueur 2
 
 //////////////////Game objects//////////////////
 
@@ -164,28 +162,24 @@ snakes.forEach(snake => {
 // Fonction pour déplacer les serpents et gérer le jeu
 const move = () => {
   compareSnakeColision()
-  console.log(snakes[0].freez)
-  console.log(snakes[1].freez)
-  console.log(snakes[2].freez)
-  console.log(snakes[3].freez)
+
   for (let i = 0; i < numberOfSnakes; i++) {
     snakes[i].checkIntercection()
-    document.getElementById("Score").innerHTML = "Score Snake n°1 : " + snakes[0].score + "  |  Score Snake n°2 : " + snakes[1].score;
     snakes[i].canChangeDirection = true;
     snakes[i].update();
     apple.checkCollision(snakes[i]);
-    tousFreezSaufUn ?
-      (gameOver = false, console.log("false")) : (gameOver = true, console.log("true"));
+    allFreezeExceptOne() ?
+      gameOver = true : gameOver = false;
   }
 
   !gameOver
-    ? (CTX.fillStyle = GRID_BACK_GROUND_COLOR,
+  ? (CTX.fillStyle = GRID_BACK_GROUND_COLOR,
       CTX.fillRect(0, 0, GRID_WITH, GRID_HEIGHT),
       firstTime
-        ? (apple.create(), firstTime = false)
-        : snakes.forEach(snake => snake.draw()),
-      apple.draw(), cpttest++) : !cpttest == 0 ? location.reload() : console.log("1")
-  // apple.draw(),cpttest++): (allfreez(),!cpttest==0)?location.reload():console.log("1")
+          ? (apple.create(), firstTime = false)
+          : snakes.forEach(snake => snake.draw()),
+      apple.draw(), cpttest++) : (cpttest !== 0 ? location.reload() : console.log("1"));
+
 };
 
 // Appel de la fonction move à intervalle régulier
@@ -229,7 +223,8 @@ function compareSnakeColision() {
   }
 }
 
-function tousFreezSaufUn() {
+//Fonction qui regarde si 1 ou 0 snake dans la liste snakes sont snake.freez = true
+function allFreezeExceptOne() {
   const nonFreezSnakes = snakes.filter(snake => !snake.freez);
-  return nonFreezSnakes.length === 1 || nonFreezSnakes.length === 0;
+  return nonFreezSnakes.length <= 1;
 }
