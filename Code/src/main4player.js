@@ -93,7 +93,7 @@ const snakeConfigs = [
     posX: 23,
     posY: 23,
     direction: 1,
-    hunger: 50,
+    hunger: SNAKE_DEFAULT_HUNGER,
     squareSize: GAME_SQUARE_SIZE,
     gridWidth: GAME_GRID_WITH_SIZE,
     gridHeight: GAME_GRID_HEIGHT_SIZE,
