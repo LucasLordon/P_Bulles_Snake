@@ -7,19 +7,19 @@ import Snake from './snake'; // Importe la classe Snake du module snake.js
 
 //////////////////Constant//////////////////
 
-  //CANVAS
+//CANVAS
 const canvas = document.querySelector('canvas');
 const CTX = canvas.getContext('2d');
-  //GRID
+//GRID
 const GRID_BACK_GROUND_COLOR = 'black'; // Couleur de fond de la grille
 const GRID_WITH = canvas.width; // Largeur de la grille
 const GRID_HEIGHT = canvas.height; // Hauteur de la grille
-  //GAME
+//GAME
 const GAME_SQUARE_SIZE = 50; // Taille d'un carré du jeu
 const GAME_SPEED = 200; // Vitesse du jeu en millisecondes
-const GAME_GRID_WITH_SIZE = GRID_WITH/GAME_SQUARE_SIZE; // Nombre de carrés en largeur
-const GAME_GRID_HEIGHT_SIZE = GRID_HEIGHT/GAME_SQUARE_SIZE; // Nombre de carrés en hauteur
-  //SNAKE
+const GAME_GRID_WITH_SIZE = GRID_WITH / GAME_SQUARE_SIZE; // Nombre de carrés en largeur
+const GAME_GRID_HEIGHT_SIZE = GRID_HEIGHT / GAME_SQUARE_SIZE; // Nombre de carrés en hauteur
+//SNAKE
 const SNAKE_DEFAULT_LENGTH = 3; // Longueur initiale du serpent
 const SNAKE_DEFAULT_HUNGER = 0; // Niveau de faim initial du serpent
 const SNAKE_DEFAULT_COLOR = "blue"; // Couleur de la tête du serpent
@@ -36,7 +36,7 @@ const SNAKE_DEFAULT_RIGHT_CONTROL = "ArrowRight"; // Touche de contrôle vers la
 
 //////////////////Variables//////////////////
 
-let firstTime=true; // Indicateur de la première exécution du jeu
+let firstTime = true; // Indicateur de la première exécution du jeu
 let gameOver = false; // Indicateur de fin de jeu
 let player1Score = 0; // Score du joueur 1
 let player2Score = 0; // Score du joueur 2
@@ -50,7 +50,7 @@ let cpttest = 0; // Compteur de tests
 const snakeConfigs = [
   {
     color: SNAKE_DEFAULT_COLOR,
-    bodyColor:SNAKE_DEFAULT_BODY_COLOR,
+    bodyColor: SNAKE_DEFAULT_BODY_COLOR,
     length: SNAKE_DEFAULT_LENGTH,
     posX: SNAKE_DEFAULT_POS_X,
     posY: SNAKE_DEFAULT_POS_Y,
@@ -69,7 +69,7 @@ const snakeConfigs = [
   },
   {
     color: "yellow",
-    bodyColor:"green",
+    bodyColor: "green",
     length: SNAKE_DEFAULT_LENGTH,
     posX: 23,
     posY: 0,
@@ -88,7 +88,7 @@ const snakeConfigs = [
   },
   {
     color: "purple",
-    bodyColor:"Magenta",
+    bodyColor: "Magenta",
     length: SNAKE_DEFAULT_LENGTH,
     posX: 23,
     posY: 23,
@@ -107,7 +107,7 @@ const snakeConfigs = [
   },
   {
     color: "Cyan",
-    bodyColor:"White",
+    bodyColor: "White",
     length: SNAKE_DEFAULT_LENGTH,
     posX: 0,
     posY: 23,
@@ -152,7 +152,7 @@ for (let i = 0; i < numberOfSnakes; i++) {
 }
 
 // Création de l'objet Apple
-let apple = new Apple('orange',0,0,snakes,1,GAME_SQUARE_SIZE,GAME_GRID_WITH_SIZE,GAME_GRID_HEIGHT_SIZE)
+let apple = new Apple('orange', 0, 0, snakes, 1, GAME_SQUARE_SIZE, GAME_GRID_WITH_SIZE, GAME_GRID_HEIGHT_SIZE)
 
 //////////////////Program//////////////////
 
@@ -164,16 +164,18 @@ snakes.forEach(snake => {
 // Fonction pour déplacer les serpents et gérer le jeu
 const move = () => {
   compareSnakeColision()
-  
+  console.log(snakes[0].freez)
+  console.log(snakes[1].freez)
+  console.log(snakes[2].freez)
+  console.log(snakes[3].freez)
   for (let i = 0; i < numberOfSnakes; i++) {
     snakes[i].checkIntercection()
     document.getElementById("Score").innerHTML = "Score Snake n°1 : " + snakes[0].score + "  |  Score Snake n°2 : " + snakes[1].score;
     snakes[i].canChangeDirection = true;
     snakes[i].update();
     apple.checkCollision(snakes[i]);
-    (compareSnakeColision()||snakes[i].checkIntercection())&&!cpttest==0?
-    gameOver = false:undefined;
-
+    tousFreezSaufUn ?
+      (gameOver = false, console.log("false")) : (gameOver = true, console.log("true"));
   }
 
   !gameOver
@@ -182,8 +184,8 @@ const move = () => {
       firstTime
         ? (apple.create(), firstTime = false)
         : snakes.forEach(snake => snake.draw()),
-        apple.draw(),cpttest++): !cpttest==0?location.reload():console.log("1")
-    // apple.draw(),cpttest++): (allfreez(),!cpttest==0)?location.reload():console.log("1")
+      apple.draw(), cpttest++) : !cpttest == 0 ? location.reload() : console.log("1")
+  // apple.draw(),cpttest++): (allfreez(),!cpttest==0)?location.reload():console.log("1")
 };
 
 // Appel de la fonction move à intervalle régulier
@@ -221,20 +223,13 @@ requestAnimationFrame(move);
 // Fonction pour comparer les collisions entre les serpents empechant les comparaison double exeple : 1 avec 2 puis 2 avec 1 (afin d'optimiser le code)
 function compareSnakeColision() {
   for (let i = 0; i <= numberOfSnakes; i++) {
-      for (let j = i + 1; j <= numberOfSnakes-1; j++) {
-          if(snakes[i].checkSnakeIntercection(snakes[i],snakes[j]))
-          {
-            return true;
-          }
-      }
+    for (let j = i + 1; j <= numberOfSnakes - 1; j++) {
+      snakes[i].checkSnakeIntercection(snakes[i], snakes[j])
+    }
   }
-  return false;
 }
 
-// // Fonction pour geler tous les serpents
-// function allfreez(){
-//   for (let i; i < numberOfSnakes-1; i++) {
-//     console.log(i)
-//   }
-//   return false;
-// }
+function tousFreezSaufUn() {
+  const nonFreezSnakes = snakes.filter(snake => !snake.freez);
+  return nonFreezSnakes.length === 1 || nonFreezSnakes.length === 0;
+}
