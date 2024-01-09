@@ -66,3 +66,7 @@ export default class Apple {
         ctx.fillRect(this.PosX * this.GAMESQUARESIZE, this.PosY * this.GAMESQUARESIZE, this.GAMESQUARESIZE, this.GAMESQUARESIZE);
     }
 }
+
+
+
+
