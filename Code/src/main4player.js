@@ -159,7 +159,7 @@ snakes.forEach(snake => {
   snake.initial();
 });
 
-// Fonction pour déplacer les serpents et gérer le jeu
+// Fonction pour gérer le jeu
 const move = () => {
   compareSnakeColision()
 
